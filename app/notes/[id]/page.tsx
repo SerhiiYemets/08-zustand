@@ -8,37 +8,36 @@ import { fetchNoteById } from "@/lib/api";
 import type { Metadata } from "next";
 
 interface NoteDetailsProps {
-    params: Promise<{ id: string }>;
+    params: { id: string };
 }
 
-export async function generateMetadata({ params }: NoteDetailsProps ): Promise<Metadata> {
-    const resolvedParams = await params;
-    const { id } = resolvedParams;
-    const note = await fetchNoteById(id)
-    
+export async function generateMetadata(
+    { params }: NoteDetailsProps
+): Promise<Metadata> {
+    const { id } = params;
+    const note = await fetchNoteById(id);
+
     return {
         title: `Note: ${note.title}`,
-        description: note.content.slice(0, 30),
+        description: note.content.substring(0, 160),
         openGraph: {
-        title: `Note: ${note.title}`,
-        description: note.content.slice(0, 100),
-        url: `https://notehub.com/notes/${id}`,
-        siteName: 'NoteHub',
-        images: [
-            {
-            url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
-            width: 1200,
-            height: 630,
-            alt: note.title,
-            },
-        ],
-        type: 'article',
+            title: `Note: ${note.title}`,
+            description: note.content.substring(0, 160),
+            url: `https://notehub.com/notes/${id}`,
+            images: [
+                {
+                    url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+                    width: 1200,
+                    height: 630,
+                    alt: note.title,
+                },
+            ],
         },
-    }
+    };
 }
 
 const NoteDetails = async ({ params }: NoteDetailsProps) => {
-    const { id } = await params;
+    const { id } = params;
     const queryClient = new QueryClient();
     
     await queryClient.prefetchQuery({
