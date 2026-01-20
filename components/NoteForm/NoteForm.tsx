@@ -15,7 +15,6 @@ export default function NoteForm() {
 
     const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
-
     useEffect(() => {
         if (!draft) {
         setDraft({ title: '', content: '', tag: 'Todo' });
@@ -56,7 +55,7 @@ export default function NoteForm() {
     return (
     <form action={handleSubmit} className={css.form}>
         <div className={css.formGroup}>
-            <label htmlFor={`${fieldId} - title`}>Title</label>
+            <label htmlFor={`${fieldId}-title`}>Title</label>
             <input
             id={`${fieldId}-title`}
             type="text"
