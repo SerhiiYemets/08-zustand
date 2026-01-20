@@ -4,9 +4,9 @@ import NotesClient from './Notes.client';
 import type { Metadata } from "next";
 
 interface NotesPageProps {
-  params: Promise<{
-    slug?: string[];
-  }>;
+    params: Promise<{
+        slug?: string[];
+    }>;
 }
 
 export async function generateMetadata(
