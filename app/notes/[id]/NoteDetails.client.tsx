@@ -20,6 +20,19 @@ export default function NoteDetailsClient({ id }: { id: string }) {
     if (error) return <p>Something went wrong.</p>;
     if (!note) return <p>Note not found.</p>;
 
+<script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: note.title,
+        description: note.content.substring(0, 160),
+        url: `https://notehub.com/notes/${id}`,
+        }),
+    }}
+/>
+
     return (
         <div className={css.container}>
             <div className={css.item}>

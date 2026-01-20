@@ -11,27 +11,29 @@ interface NoteDetailsProps {
     params: { id: string };
 }
 
-export async function generateMetadata(
-    { params }: NoteDetailsProps
-): Promise<Metadata> {
+export async function generateMetadata({ params }: NoteDetailsProps): Promise<Metadata> {
     const { id } = params;
     const note = await fetchNoteById(id);
 
+    const title = `Note: ${note.title}`;
+    const description = note.content.substring(0, 160);
+
     return {
-        title: `Note: ${note.title}`,
-        description: note.content.substring(0, 160),
+        title,
+        description,
+        alternates: { canonical: `/notes/${id}` },
         openGraph: {
-            title: `Note: ${note.title}`,
-            description: note.content.substring(0, 160),
-            url: `https://notehub.com/notes/${id}`,
-            images: [
-                {
-                    url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
-                    width: 1200,
-                    height: 630,
-                    alt: note.title,
-                },
-            ],
+        title,
+        description,
+        url: `https://notehub.com/notes/${id}`,
+        images: [{ url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg', width: 1200, height: 630, alt: note.title }],
+        type: 'article',
+        },
+        twitter: { 
+            card: 'summary_large_image', 
+            title, 
+            description, 
+            images: ['https://ac.goit.global/fullstack/react/notehub-og-meta.jpg'] 
         },
     };
 }
