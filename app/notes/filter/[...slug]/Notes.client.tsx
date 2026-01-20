@@ -33,16 +33,17 @@ export default function NotesClient({ tag }: NotesClientProps) {
     });
 
     useEffect(() => {
-        const t = setTimeout(() => {
+        const timeoutId = setTimeout(() => {
             setSearch(searchInput.trim());
             setCurrentPage(1);
         }, 500);
 
-        return () => clearTimeout(t);
+        return () => clearTimeout(timeoutId);
     }, [searchInput]);
 
-    const hasResults = !!data?.notes?.length;
+    const notes = data?.notes ?? [];
     const totalPages = data?.totalPages ?? 1;
+    const hasResults = notes.length > 0;
 
     return (
         <div className={css.app}>
@@ -54,16 +55,24 @@ export default function NotesClient({ tag }: NotesClientProps) {
             </header>
 
             <main className="notes-list">
-                {hasResults && totalPages > 1 && (
-                    <Pagination
-                        totalPages={totalPages}
-                        currentPage={currentPage}
-                        onSelectPage={setCurrentPage}
-                    />
+                {isLoading && <p>Loading...</p>}
+
+                {!isLoading && hasResults && (
+                    <>
+                        <NoteList notes={notes} />
+
+                        {totalPages > 1 && (
+                            <Pagination
+                                totalPages={totalPages}
+                                currentPage={currentPage}
+                                onSelectPage={setCurrentPage}
+                            />
+                        )}
+                    </>
                 )}
 
-                {data && !isLoading && (
-                    <NoteList notes={data.notes ?? []} />
+                {data && !isLoading && !hasResults && (
+                    <p>No notes found</p>
                 )}
             </main>
         </div>
