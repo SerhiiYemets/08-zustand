@@ -1,21 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import css from "./NotesClient.module.css";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { fetchNotes } from "@/lib/api";
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
-import Modal from "@/components/Modal/Modal";
 import SearchBox from "@/components/SearchBox/SearchBox";
-import NoteForm from "@/components/NoteForm/NoteForm";
 
 interface NotesClientProps {
     tag: string;
 }
 
 export default function NotesClient({ tag }: NotesClientProps) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [search, setSearch] = useState("");
@@ -50,12 +48,9 @@ export default function NotesClient({ tag }: NotesClientProps) {
         <div className={css.app}>
             <header className={css.toolbar}>
                 <SearchBox value={searchInput} onChange={setSearchInput} />
-                <button
-                    className={css.button}
-                    onClick={() => setIsModalOpen(true)}
-                >
+                <Link href="/notes/action/create" className={css.button}>
                     Create note +
-                </button>
+                </Link>
             </header>
 
             <main className="notes-list">
@@ -69,12 +64,6 @@ export default function NotesClient({ tag }: NotesClientProps) {
 
                 {data && !isLoading && (
                     <NoteList notes={data.notes ?? []} />
-                )}
-
-                {isModalOpen && (
-                    <Modal onClose={() => setIsModalOpen(false)}>
-                        <NoteForm onClose={() => setIsModalOpen(false)} />
-                    </Modal>
                 )}
             </main>
         </div>

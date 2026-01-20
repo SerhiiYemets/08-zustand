@@ -4,12 +4,14 @@ import NotesClient from './Notes.client';
 import type { Metadata } from "next";
 
 interface NotesPageProps {
-    params: { slug: string[] };
+  params: Promise<{
+    slug?: string[];
+  }>;
 }
 
 export async function generateMetadata(
     { params }: NotesPageProps): Promise<Metadata> {
-    const { slug } = params;
+    const { slug } = await params;
     const tag = slug?.[0] ?? 'all';
 
     const title =
@@ -44,7 +46,7 @@ export async function generateMetadata(
 }
 
 export default async function NotesPage({ params }: NotesPageProps) {
-    const { slug } = params;
+    const { slug } = await params;
     const tag = slug?.[0] ?? 'all';
 
     const queryClient = new QueryClient();
